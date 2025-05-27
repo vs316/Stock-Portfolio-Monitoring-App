@@ -8,24 +8,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody UserClass u) {
-        String response = userService.register(u);
+    public ResponseEntity<String> registerUser(@RequestBody UserClass u) {
+        String response = String.valueOf(userService.registerUser(u));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/getUser")
-    public ResponseEntity<?> getUserById(@RequestParam int id) {
-        UserClass user = (UserClass) userService.getUserById(id);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
+    @GetMapping(value = "/getUserById", produces = "application/json")
+    public ResponseEntity<?> getUserById(@RequestParam Long id) {
+        return userService.getUserById(id);
     }
+//
+//        @PostMapping("/checkUser")
+//        public ResponseEntity<?> checkUser(@RequestParam String emailId) {
+//            return userService.checkUserByEmail(emailId);
+//        }
+
 
 }
