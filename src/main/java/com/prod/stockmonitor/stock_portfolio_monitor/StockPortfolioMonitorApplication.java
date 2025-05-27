@@ -1,13 +1,13 @@
-package com.prod.stockmonitoring.stock_monitoring_application;
+package com.prod.stockmonitor.stock_portfolio_monitor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class StockMonitoringApplication {
+public class StockPortfolioMonitorApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(StockMonitoringApplication.class, args);
+		SpringApplication.run(StockPortfolioMonitorApplication.class, args);
 	}
 
 }
