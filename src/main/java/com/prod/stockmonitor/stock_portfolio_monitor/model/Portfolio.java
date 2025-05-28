@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List; // Import List
+
 @Entity
 @Table(name = "portfolio")
 @Getter
@@ -12,14 +14,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-
 public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Assuming UserClass exists and maps to "users" table
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
@@ -27,4 +27,11 @@ public class Portfolio {
 
     @Column(nullable = false)
     private String portfolioName;
+
+    // Correctly define the One-to-Many relationship with StockHolding
+    // cascade = CascadeType.ALL ensures that if a Portfolio is deleted, its StockHoldings are also deleted.
+    // orphanRemoval = true ensures that if a StockHolding is removed from the list, it's deleted from the DB.
+    // mappedBy = "portfolio" indicates the owning side of the relationship (StockHolding has a 'portfolio' field).
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<StockHolding> stockHoldings; // Lombok will generate getStockHoldings() for this
 }
