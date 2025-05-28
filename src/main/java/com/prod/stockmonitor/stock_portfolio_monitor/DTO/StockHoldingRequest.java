@@ -9,5 +9,6 @@ public class StockHoldingRequest {
     private String stockName;
     private Double quantity;
     private Double buyPrice;
+    private Double currentPrice;
 }
 
