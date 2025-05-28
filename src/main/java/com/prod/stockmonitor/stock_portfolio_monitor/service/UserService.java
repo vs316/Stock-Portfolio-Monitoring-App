@@ -2,6 +2,7 @@ package com.prod.stockmonitor.stock_portfolio_monitor.service;
 
 
 import com.prod.stockmonitor.stock_portfolio_monitor.DTO.UserResponseDTO;
+import com.prod.stockmonitor.stock_portfolio_monitor.DTO.UserUpdateDTO;
 import com.prod.stockmonitor.stock_portfolio_monitor.model.UserClass;
 import com.prod.stockmonitor.stock_portfolio_monitor.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -61,7 +62,20 @@ public class UserService {
         user.setPassword(passwordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
+    @Transactional
+    public ResponseEntity<?> updateUserById(Long id, UserUpdateDTO dto){
+        UserClass user=userRepository.findById(id).orElse(null);
+        if(user==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found");
 
+        }
+        user.setFullName(dto.getFullName());
+        user.setUsername(dto.getUsername());
+        user.setEmailId(dto.getEmailId());
+        user.setPassword(passwordEncoder().encode(dto.getPassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok("Details are updated successfully");
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
