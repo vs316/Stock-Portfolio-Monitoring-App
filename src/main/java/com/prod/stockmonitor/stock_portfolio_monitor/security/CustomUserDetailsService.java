@@ -1,7 +1,7 @@
 package com.prod.stockmonitor.stock_portfolio_monitor.security;
 
 import com.prod.stockmonitor.stock_portfolio_monitor.model.UserClass;
-import com.prod.stockmonitor.stock_portfolio_monitor.model.UserRepository;
+import com.prod.stockmonitor.stock_portfolio_monitor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;

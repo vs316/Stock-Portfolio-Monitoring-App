@@ -4,7 +4,7 @@ import com.prod.stockmonitor.stock_portfolio_monitor.DTO.LoginRequestDTO;
 import com.prod.stockmonitor.stock_portfolio_monitor.DTO.LoginResponseDTO;
 import com.prod.stockmonitor.stock_portfolio_monitor.DTO.UserUpdateDTO;
 import com.prod.stockmonitor.stock_portfolio_monitor.model.UserClass;
-import com.prod.stockmonitor.stock_portfolio_monitor.model.UserRepository;
+import com.prod.stockmonitor.stock_portfolio_monitor.repository.UserRepository;
 import com.prod.stockmonitor.stock_portfolio_monitor.security.JwtUtil;
 import com.prod.stockmonitor.stock_portfolio_monitor.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
