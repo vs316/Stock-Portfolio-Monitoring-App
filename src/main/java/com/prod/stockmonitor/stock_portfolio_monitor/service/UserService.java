@@ -51,7 +51,7 @@ public class UserService {
 //        return user;
 //    }
 
-//    public String register(UserClass user) {
+    //    public String register(UserClass user) {
 //        // Hash password before saving
 //        user.setPassword(passwordEncoder().encode(user.getPassword()));
 //        userRepository.save(user);
@@ -62,10 +62,11 @@ public class UserService {
         user.setPassword(passwordEncoder().encode(user.getPassword()));
         return userRepository.save(user);
     }
+
     @Transactional
-    public ResponseEntity<?> updateUserById(Long id, UserUpdateDTO dto){
-        UserClass user=userRepository.findById(id).orElse(null);
-        if(user==null){
+    public ResponseEntity<?> updateUserById(Long id, UserUpdateDTO dto) {
+        UserClass user = userRepository.findById(id).orElse(null);
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User Not Found");
 
         }
