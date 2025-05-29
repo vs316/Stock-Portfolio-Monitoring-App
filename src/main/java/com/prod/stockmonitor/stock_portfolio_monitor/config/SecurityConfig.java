@@ -1,4 +1,4 @@
-package com.prod.stockmonitor.stock_portfolio_monitor;
+package com.prod.stockmonitor.stock_portfolio_monitor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

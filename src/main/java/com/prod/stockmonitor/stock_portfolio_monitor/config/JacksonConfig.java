@@ -1,4 +1,4 @@
-package com.prod.stockmonitor.stock_portfolio_monitor;
+package com.prod.stockmonitor.stock_portfolio_monitor.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
