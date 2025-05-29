@@ -1,5 +1,6 @@
 package com.prod.stockmonitor.stock_portfolio_monitor.controller;
 
+import com.prod.stockmonitor.stock_portfolio_monitor.DTO.GainLossDTO;
 import com.prod.stockmonitor.stock_portfolio_monitor.DTO.StockHoldingRequest;
 import com.prod.stockmonitor.stock_portfolio_monitor.model.StockHolding;
 import com.prod.stockmonitor.stock_portfolio_monitor.service.StockHoldingService;
@@ -50,4 +51,19 @@ public class StockHoldingController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @GetMapping("gainloss/{portfolioId}")
+    public ResponseEntity<List<GainLossDTO>> gainLossPerStock(@PathVariable Long portfolioId){
+        return ResponseEntity.ok(stockService.calculateGainLossForPortfolio(portfolioId));
+    }
+    @GetMapping("/gainloss/total/{portfolioId}")
+    public ResponseEntity<Double> getTotalGainLoss(@PathVariable Long portfolioId){
+        return ResponseEntity.ok(stockService.getTotalPortfolioGainLoss(portfolioId));
+    }
+
+    @PutMapping("/gainloss/update/{portfolioId}")
+    public ResponseEntity<List<GainLossDTO>> updateGainLossForPortfolio(@PathVariable Long portfolioId) {
+        List<GainLossDTO> updatedGainLossList = stockService.updateGainLossForPortfolio(portfolioId);
+        return ResponseEntity.ok(updatedGainLossList);
+    }
+
 }

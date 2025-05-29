@@ -29,8 +29,9 @@ public class StockHolding {
 
     @Column(nullable = false)
     private Double buyPrice;
-
+    @Column(name="current_price")
     private Double currentPrice;  // For real-time updates (optional)
 
     private Double gainLoss;      // Calculated based on current price (optional)
+    private Double percentage;
 }
