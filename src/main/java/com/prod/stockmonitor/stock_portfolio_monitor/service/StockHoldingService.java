@@ -60,8 +60,7 @@ public class StockHoldingService {
         if (req.getCurrentPrice() != null) stock.setCurrentPrice(req.getCurrentPrice());
 
         stockRepo.save(stock);
-
-        // Trigger gain/loss update after stock price update
+        
         updateGainLossForStock(stock);
 
         return "Stock updated!";
@@ -87,22 +86,27 @@ public class StockHoldingService {
         for(StockHolding stock:stocks){
             double buyPrice=stock.getBuyPrice();
             double currentPrice= stock.getCurrentPrice()!=null?stock.getCurrentPrice():0.0;
-            double quantity=stock.getQuantity()!=null?stock.getQuantity():0.0;
-            double gainLoss=(currentPrice-buyPrice)*quantity;
-            double percentage=buyPrice!=0?(gainLoss/(buyPrice*quantity))*100:0.0;
-            GainLossDTO dto=new GainLossDTO();
-            dto.setStockSymbol(stock.getStockSymbol());
-            dto.setStockName(stock.getStockName());
-            dto.setQuantity(quantity);
-            dto.setCurrentPrice(currentPrice);
-            dto.setBuyPrice(buyPrice);
-            dto.setAbsoluteGainLoss(gainLoss);
-            dto.setPercentageGainLoss(percentage);
+            GainLossDTO dto = getGainLossDTO(stock, currentPrice, buyPrice);
             gainlossList.add(dto);
 
 
         }
     return gainlossList;
+    }
+
+    private static GainLossDTO getGainLossDTO(StockHolding stock, double currentPrice, double buyPrice) {
+        double quantity= stock.getQuantity()!=null? stock.getQuantity():0.0;
+        double gainLoss=(currentPrice - buyPrice)*quantity;
+        double percentage= buyPrice !=0?(gainLoss/(buyPrice *quantity))*100:0.0;
+        GainLossDTO dto=new GainLossDTO();
+        dto.setStockSymbol(stock.getStockSymbol());
+        dto.setStockName(stock.getStockName());
+        dto.setQuantity(quantity);
+        dto.setCurrentPrice(currentPrice);
+        dto.setBuyPrice(buyPrice);
+        dto.setAbsoluteGainLoss(gainLoss);
+        dto.setPercentageGainLoss(percentage);
+        return dto;
     }
 
     public double getTotalPortfolioGainLoss (Long portfolioId){

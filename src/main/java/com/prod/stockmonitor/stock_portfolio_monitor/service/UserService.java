@@ -35,7 +35,7 @@ public class UserService {
 
         UserResponseDTO response = new UserResponseDTO();
         response.setUsername(user.getUsername());
-        response.setEmailId(user.getEmailId());  // Will only be set if `emailId` is non-null
+        response.setEmailId(user.getEmailId());
         response.setFullName(user.getFullName());
         response.setRole(user.getRole());
 
@@ -46,17 +46,6 @@ public class UserService {
         return ResponseEntity.ok(response);
     }
 
-//    private UserClass hideSensitive(UserClass user) {
-//        user.setPassword(null); // Hide password
-//        return user;
-//    }
-
-    //    public String register(UserClass user) {
-//        // Hash password before saving
-//        user.setPassword(passwordEncoder().encode(user.getPassword()));
-//        userRepository.save(user);
-//        return "User registered successfully!";
-//    }
     @Transactional
     public UserClass registerUser(UserClass user) {
         user.setPassword(passwordEncoder().encode(user.getPassword()));

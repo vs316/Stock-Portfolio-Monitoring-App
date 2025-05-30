@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor // Generates no-args constructor
-@AllArgsConstructor // Generates all-args constructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Alert {
 
     @Id

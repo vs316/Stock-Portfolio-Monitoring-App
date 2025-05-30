@@ -1,4 +1,3 @@
-// StockHoldingSummaryDTO.java
 package com.prod.stockmonitor.stock_portfolio_monitor.DTO;
 
 

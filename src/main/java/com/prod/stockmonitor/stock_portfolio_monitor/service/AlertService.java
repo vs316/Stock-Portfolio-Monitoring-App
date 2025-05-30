@@ -33,7 +33,7 @@ public class AlertService {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Scheduled(fixedRate = 6000) // Runs every 6 seconds
+    @Scheduled(fixedRate = 6000000) // Check every 100 minutes
     @Transactional
     public void checkAlerts() {
         List<Alert> alerts = alertRepository.findAll();
@@ -46,7 +46,6 @@ public class AlertService {
                     alertRepository.delete(alert);
                 }
             } catch (Exception e) {
-                // Log the exception
                 e.printStackTrace();
             }
         }
@@ -56,7 +55,7 @@ public class AlertService {
         String url = "https://stock.indianapi.in/stock?name=" + stockSymbol;
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
-                .header("X-Api-Key", "sk-live-mu8DiZC6TzXRTx6P9BGPOxs7qTLt2GRcTDKqNab5")
+                .header("X-Api-Key", "sk-live-73gVcZCMddsGRqWBUz5Rz0FruELydNjwzrFbNUz3")
                 .GET()
                 .build();
 

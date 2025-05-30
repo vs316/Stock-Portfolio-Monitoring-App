@@ -1,4 +1,3 @@
-// ReportService.java (Corrected Code with Record Accessors)
 package com.prod.stockmonitor.stock_portfolio_monitor.service;
 
 import com.prod.stockmonitor.stock_portfolio_monitor.DTO.PortfolioSummaryDTO;
@@ -16,10 +15,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-// Apache POI Imports
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -41,29 +37,19 @@ public class ReportService {
     private final PortfolioRepository portfolioRepository;
     private final StockHoldingRepository stockHoldingRepository;
     private final UserRepository userRepository;
-    // Assuming you'll have a service for fetching real-time prices (Module 3)
-    // private final StockPriceFetcherService stockPriceFetcherService;
+
 
     public ReportService(PortfolioRepository portfolioRepository,
                          StockHoldingRepository stockHoldingRepository,
                          UserRepository userRepository
-            /*, StockPriceFetcherService stockPriceFetcherService*/) {
+        ) {
         this.portfolioRepository = portfolioRepository;
         this.stockHoldingRepository = stockHoldingRepository;
         this.userRepository = userRepository;
-        // this.stockPriceFetcherService = stockPriceFetcherService;
+
     }
 
-    /**
-     * Generates a summary report for a given portfolio.
-     * For now, this will use the existing currentPrice in StockHolding,
-     * or assume currentPrice is available. In a full implementation,
-     * it would fetch real-time prices.
-     *
-     * @param portfolioId The ID of the portfolio to summarize.
-     * @return PortfolioSummaryDTO containing the summary.
-     * @throws RuntimeException if the portfolio or user is not found.
-     */
+
     public PortfolioSummaryDTO getPortfolioSummary(Long portfolioId) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new RuntimeException("Portfolio not found with ID: " + portfolioId));
@@ -78,13 +64,10 @@ public class ReportService {
         List<StockHoldingSummaryDTO> stockSummaries = new ArrayList<>();
 
         for (StockHolding holding : holdings) {
-            // For now, using existing currentPrice or assuming it's set.
-            // In a real scenario, you'd integrate with StockPriceFetcherService here.
+
             Double currentPrice = holding.getCurrentPrice() != null ? holding.getCurrentPrice() : holding.getBuyPrice(); // Fallback
             if (currentPrice == null) {
-                // If currentPrice is null, it means it hasn't been fetched yet.
-                // For reporting, you might want to fetch it or skip this holding, or use buyPrice.
-                // For this example, we'll use buyPrice if currentPrice is null.
+
                 currentPrice = holding.getBuyPrice();
             }
 
@@ -117,30 +100,23 @@ public class ReportService {
                 portfolio.getId(),
                 portfolio.getPortfolioName(),
                 user.getId(),
-                user.getFullName(), // Assuming fullName is preferred for display
+                user.getFullName(),
                 totalInvestedValue,
                 currentMarketValue,
                 totalGainLoss,
                 totalGainLossPercentage,
-                LocalDate.now(), // As of current date
+                LocalDate.now(),
                 stockSummaries
         );
     }
 
-    /**
-     * Exports the portfolio summary to an Excel file.
-     *
-     * @param portfolioId The ID of the portfolio to export.
-     * @return A byte array representing the Excel file.
-     * @throws RuntimeException if portfolio not found or IOException during file generation.
-     */
+
     public byte[] exportPortfolioSummaryToExcel(Long portfolioId) {
         PortfolioSummaryDTO summary = getPortfolioSummary(portfolioId);
 
         try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             Sheet sheet = workbook.createSheet("Portfolio Summary");
 
-            // Header Row for Portfolio Summary
             Row headerRow1 = sheet.createRow(0);
             headerRow1.createCell(0).setCellValue("Portfolio Name:");
             headerRow1.createCell(1).setCellValue(summary.portfolioName());
@@ -166,15 +142,13 @@ public class ReportService {
             headerRow6.createCell(1).setCellValue(summary.totalGainLossPercentage() + "%");
 
 
-            // Stock Holdings Header
-            int rowNum = 8; // Start stock holdings a few rows after summary
+            int rowNum = 8;
             Row stockHeaderRow = sheet.createRow(rowNum++);
             String[] stockHeaders = {"Holding ID", "Symbol", "Name", "Quantity", "Buy Price", "Current Price", "Gain/Loss", "Gain/Loss %"};
             for (int i = 0; i < stockHeaders.length; i++) {
                 stockHeaderRow.createCell(i).setCellValue(stockHeaders[i]);
             }
 
-            // Stock Holdings Data
             for (StockHoldingSummaryDTO stock : summary.stockHoldings()) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(stock.holdingId());
@@ -187,7 +161,6 @@ public class ReportService {
                 row.createCell(7).setCellValue(stock.gainLossPercentage() + "%");
             }
 
-            // Auto-size columns for better readability
             for(int i = 0; i < stockHeaders.length; i++) {
                 sheet.autoSizeColumn(i);
             }
@@ -200,13 +173,7 @@ public class ReportService {
         }
     }
 
-    /**
-     * Exports the portfolio summary to a PDF file.
-     *
-     * @param portfolioId The ID of the portfolio to export.
-     * @return A byte array representing the PDF file.
-     * @throws RuntimeException if portfolio not found or DocumentException/IOException during file generation.
-     */
+
     public byte[] exportPortfolioSummaryToPdf(Long portfolioId) {
         PortfolioSummaryDTO summary = getPortfolioSummary(portfolioId);
 
@@ -215,31 +182,27 @@ public class ReportService {
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            // Add Portfolio Summary
             document.add(new Paragraph("Portfolio Summary for " + summary.portfolioName()));
             document.add(new Paragraph("As Of Date: " + summary.asOfDate()));
             document.add(new Paragraph("Total Invested Value: " + String.format("%.2f", summary.totalInvestedValue())));
             document.add(new Paragraph("Current Market Value: " + String.format("%.2f", summary.currentMarketValue())));
             document.add(new Paragraph("Total Gain/Loss: " + String.format("%.2f", summary.totalGainLoss())));
             document.add(new Paragraph("Total Gain/Loss Percentage: " + String.format("%.2f", summary.totalGainLossPercentage()) + "%"));
-            document.add(new Paragraph("\n")); // Add a line break
+            document.add(new Paragraph("\n"));
 
 
-            // Add Stock Holdings Table
             document.add(new Paragraph("Stock Holdings:"));
-            PdfPTable table = new PdfPTable(8); // 8 columns as per StockHoldingSummaryDTO
-            table.setWidthPercentage(100); // Table will fill 100% of page width
-            table.setSpacingBefore(10f); // Space before table
-            table.setSpacingAfter(10f); // Space after table
+            PdfPTable table = new PdfPTable(8);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(10f);
+            table.setSpacingAfter(10f);
 
-            // Add table headers
             String[] stockHeaders = {"Holding ID", "Symbol", "Name", "Quantity", "Buy Price", "Current Price", "Gain/Loss", "Gain/Loss %"};
             for (String header : stockHeaders) {
                 PdfPCell cell = new PdfPCell(new Phrase(header));
                 table.addCell(cell);
             }
 
-            // Add stock holding data
             for (StockHoldingSummaryDTO stock : summary.stockHoldings()) {
                 table.addCell(String.valueOf(stock.holdingId()));
                 table.addCell(stock.stockSymbol());

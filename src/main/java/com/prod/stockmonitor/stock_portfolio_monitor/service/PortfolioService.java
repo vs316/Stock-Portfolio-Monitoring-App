@@ -14,7 +14,7 @@ import java.util.Optional;
 public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
-    private final UserRepository userRepository; // Add this!
+    private final UserRepository userRepository;
 
     public PortfolioService(PortfolioRepository portfolioRepository, UserRepository userRepository) {
         this.portfolioRepository = portfolioRepository;
@@ -22,16 +22,16 @@ public class PortfolioService {
     }
 
     public String savePortfolio(PortfolioRequest request) {
-        // 1️⃣ Fetch the user by ID (ensure it's a managed entity)
+
         UserClass user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2️⃣ Create and set the portfolio
+
         Portfolio portfolio = new Portfolio();
         portfolio.setUser(user);
         portfolio.setPortfolioName(request.getPortfolioName());
 
-        // 3️⃣ Save
+
         portfolioRepository.save(portfolio);
         return "Portfolio saved successfully!";
     }

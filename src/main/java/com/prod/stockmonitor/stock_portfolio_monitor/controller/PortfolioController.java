@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
-import com.itextpdf.text.DocumentException; // For PDF error handling
+import com.itextpdf.text.DocumentException;
 
 @RestController
 @RequestMapping("/api/portfolios")
@@ -28,7 +28,7 @@ public class PortfolioController {
 
     private final PortfolioService portfolioService;
 
-    // Autowire repositories and services needed for export
+
     @Autowired
     private PortfolioRepository portfolioRepository; // Needed to fetch portfolio by ID
     @Autowired
@@ -64,8 +64,6 @@ public class PortfolioController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- NEW EXPORT ENDPOINTS ---
-
     @GetMapping("/{portfolioId}/export/excel")
     public ResponseEntity<byte[]> exportPortfolioToExcel(@PathVariable Long portfolioId) {
         Optional<Portfolio> portfolioOptional = portfolioRepository.findById(portfolioId);
@@ -89,7 +87,7 @@ public class PortfolioController {
             return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
 
         } catch (IOException e) {
-            e.printStackTrace(); // Log the exception for debugging
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

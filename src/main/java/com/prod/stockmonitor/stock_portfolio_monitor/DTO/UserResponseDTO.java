@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) // Ensures null fields are excluded
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 @Setter
 public class UserResponseDTO {
